@@ -117,7 +117,7 @@
       border-radius: 18px;
       color: #232526;
       cursor: pointer;
-      box-shadow: 0 6px 24px 0 #ff6a0033, 0 1.5px 0 #fff;
+      box-shadow: 0 6px 24px 0 #ff6a0033, 0 1.5px 0 #fff, 0 0 0 0 #ffe06655;
       font-weight: 700;
       position: relative;
       overflow: hidden;
@@ -135,7 +135,7 @@
     }
     .choice-btn:hover, .choice-btn:focus {
       transform: scale(1.15) rotate(-2deg);
-      box-shadow: 0 8px 32px 0 #ffe06699, 0 2px 0 #fff;
+      box-shadow: 0 8px 32px 0 #ffe06699, 0 2px 0 #fff, 0 0 0 8px #ffe06633;
       background: linear-gradient(135deg, #ffe066 0%, #ff6a00 100%);
       color: #ff6a00;
     }
@@ -173,6 +173,47 @@
       0% { transform: translateY(0) scale(1) rotate(0deg);}
       50% { transform: translateY(-30px) scale(1.1) rotate(8deg);}
       100% { transform: translateY(0) scale(1) rotate(0deg);}
+    }
+    .scoreboard {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5rem;
+      margin-bottom: 2.2rem;
+      padding: 1.2rem 2.5rem;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.10);
+      box-shadow: 0 4px 32px 0 #ffe06633, 0 1.5px 0 #fff2;
+      backdrop-filter: blur(8px);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #ffe066;
+      border: 2px solid #ff6a0033;
+      transition: background 0.3s;
+      position: relative;
+      z-index: 2;
+    }
+    .scoreboard span {
+      color: #fff;
+      margin-left: 0.5rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-shadow: 0 1px 8px #ff6a00aa;
+    }
+    .writeup {
+      margin-top: 2.5rem;
+      padding: 1.2rem 2rem;
+      border-radius: 18px;
+      background: rgba(30,30,40,0.7);
+      box-shadow: 0 0 20px 4px #ffe06622;
+      color: #ffe066;
+      font-size: 1.1rem;
+      text-align: center;
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -219,6 +260,11 @@
   <span class="floating-icon icon4">🪨</span>
   <span class="floating-icon icon5">📄</span>
   <div class="container">
+    <div class="scoreboard" id="scoreboard">
+      Wins: <span id="score-wins">0</span>
+      Losses: <span id="score-losses">0</span>
+      Draws: <span id="score-draws">0</span>
+    </div>
     <div class="glow-border">
       <h1>Choose Your Move</h1>
       <div class="choices">
@@ -227,24 +273,96 @@
         <button class="choice-btn" onclick="play('scissors')">✂️ Scissors</button>
       </div>
     </div>
+    <div class="writeup">
+      <strong>Built using HTML/CSS/JS</strong> with animated backgrounds, game logic, and custom win screens.<br>
+      Learned how to manage DOM events and responsive layouts.
+    </div>
   </div>
 
+  <!-- Sound effects -->
+  <audio id="audio-win" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae7e2.mp3"></audio>
+  <audio id="audio-lose" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae7e2.mp3"></audio>
+  <audio id="audio-draw" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae7e2.mp3"></audio>
+
   <script>
+    // Scoreboard logic
+    function getScore() {
+      const score = JSON.parse(localStorage.getItem('rpsScore') || '{"wins":0,"losses":0,"draws":0}');
+      return score;
+    }
+    function setScore(score) {
+      localStorage.setItem('rpsScore', JSON.stringify(score));
+    }
+    function updateScoreboard() {
+      const score = getScore();
+      document.getElementById('score-wins').textContent = score.wins;
+      document.getElementById('score-losses').textContent = score.losses;
+      document.getElementById('score-draws').textContent = score.draws;
+    }
+    updateScoreboard();
+
+    // Play sound effect
+    function playSound(result) {
+      let audioId = '';
+      if (result === 'win') audioId = 'audio-win';
+      else if (result === 'lose') audioId = 'audio-lose';
+      else audioId = 'audio-draw';
+      const audio = document.getElementById(audioId);
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play();
+      }
+    }
+
     function play(playerChoice) {
       const choices = ['rock', 'paper', 'scissors'];
       const computerChoice = choices[Math.floor(Math.random() * 3)];
-      let result;
+      let result, resultKey;
       if (playerChoice === computerChoice) {
         result = 'It’s a Draw!';
+        resultKey = 'draws';
+        playSound('draw');
       } else if (
         (playerChoice === 'rock' && computerChoice === 'scissors') ||
         (playerChoice === 'paper' && computerChoice === 'rock') ||
         (playerChoice === 'scissors' && computerChoice === 'paper')
       ) {
         result = 'You Win!';
+        resultKey = 'wins';
+        playSound('win');
       } else {
         result = 'You Lose!';
+        resultKey = 'losses';
+        playSound('lose');
       }
+      // Update scoreboard
+      const score = getScore();
+      score[resultKey]++;
+      setScore(score);
+
+      localStorage.setItem('gameResult', `You chose ${playerChoice.toUpperCase()}
+Computer chose ${computerChoice.toUpperCase()}
+Result: ${result}`);
+      window.location.href = 'result.html';
+    }
+  </script>
+</body>
+</html>
+        (playerChoice === 'scissors' && computerChoice === 'paper')
+      ) {
+        result = 'You Win!';
+        resultKey = 'wins';
+        playSound('win');
+      } else {
+        result = 'You Lose!';
+        resultKey = 'losses';
+        playSound('lose');
+      }
+      // Update scoreboard
+      const score = getScore();
+      score[resultKey]++;
+      setScore(score);
+
       localStorage.setItem('gameResult', `You chose ${playerChoice.toUpperCase()}
 Computer chose ${computerChoice.toUpperCase()}
 Result: ${result}`);

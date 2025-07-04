@@ -4,72 +4,237 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rock Paper Scissors - Intro</title>
+  <title>Rock Paper Scissors</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
     body {
       margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(120deg, #232526 0%, #414345 100%);
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      position: relative;
       overflow: hidden;
     }
-    .animated-bg {
+    /* Animated gradient overlay */
+    .animated-gradient {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') repeat;
-      background-size: cover;
-      z-index: -1;
-      animation: moveBg 60s linear infinite;
-      opacity: 0.15;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(120deg, #00cfff88 0%, #ff6a0088 100%);
+      opacity: 0.7;
+      mix-blend-mode: lighten;
+      animation: gradientMove 12s ease-in-out infinite alternate;
     }
-    @keyframes moveBg {
-      from { background-position: 0 0; }
-      to { background-position: 2000px 0; }
+    @keyframes gradientMove {
+      0% { filter: blur(60px) brightness(1); }
+      100% { filter: blur(100px) brightness(1.2); }
     }
-    .container {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
+    /* Floating emojis - more dynamic, some scale and rotate */
+    .floating-emoji {
+      position: fixed;
+      font-size: 3.2rem;
+      opacity: 0.13;
+      pointer-events: none;
+      z-index: 1;
+      animation: floatEmoji 9s linear infinite;
+      filter: drop-shadow(0 0 16px #00cfff44);
+      user-select: none;
+    }
+    .emoji1 { left: 8vw; top: 18vh; animation-delay: 0s; }
+    .emoji2 { right: 10vw; top: 12vh; animation-delay: 2s; }
+    .emoji3 { left: 15vw; bottom: 14vh; animation-delay: 4s; }
+    .emoji4 { right: 12vw; bottom: 10vh; animation-delay: 1s; }
+    .emoji5 { left: 50vw; top: 5vh; animation-delay: 3s; }
+    .emoji6 { left: 30vw; top: 60vh; animation-delay: 2.5s; }
+    .emoji7 { right: 25vw; bottom: 25vh; animation-delay: 5s; }
+    .emoji8 { left: 70vw; top: 30vh; animation-delay: 6s; }
+    .emoji9 { left: 60vw; bottom: 18vh; animation-delay: 3.5s; }
+    .emoji10 { right: 40vw; top: 50vh; animation-delay: 1.7s; }
+    .emoji11 { left: 20vw; top: 40vh; animation-delay: 7s; }
+    .emoji12 { right: 18vw; bottom: 40vh; animation-delay: 8s; }
+    @keyframes floatEmoji {
+      0% { transform: translateY(0) scale(1) rotate(0deg);}
+      30% { transform: translateY(-20px) scale(1.08) rotate(8deg);}
+      50% { transform: translateY(-40px) scale(1.13) rotate(-8deg);}
+      70% { transform: translateY(-20px) scale(1.08) rotate(8deg);}
+      100% { transform: translateY(0) scale(1) rotate(0deg);}
+    }
+    /* Glassmorphism card */
+    .start-container {
       text-align: center;
-      padding: 20px;
+      width: 100%;
+      max-width: 540px;
+      margin: auto;
+      padding: 48px 32px 40px 32px;
+      border-radius: 32px;
+      background: rgba(30, 30, 40, 0.55);
+      box-shadow: 0 8px 48px 0 #00cfff33, 0 1.5px 0 #fff2;
+      backdrop-filter: blur(18px) saturate(1.2);
+      border: 2.5px solid rgba(255,255,255,0.13);
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
     }
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+    .start-container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 32px;
+      background: linear-gradient(120deg, #00cfff33 0%, #ff6a0033 100%);
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.7;
+      filter: blur(12px);
     }
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
+    .start-title {
+      font-size: 3.2rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      letter-spacing: 2px;
+      color: #ffe066;
+      text-shadow: 0 4px 24px #ff6a00cc, 0 1px 0 #fff;
+      animation: bounceTitle 1.5s infinite alternate cubic-bezier(.68,-0.55,.27,1.55);
     }
-    button {
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
+    @keyframes bounceTitle {
+      0% { transform: translateY(0) scale(1); }
+      60% { transform: translateY(-10px) scale(1.05); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    .start-title span {
+      font-size: 2.5rem;
+      vertical-align: middle;
+      filter: drop-shadow(0 0 8px #00cfff88);
+    }
+    .start-desc {
+      font-size: 1.35rem;
+      margin-bottom: 2.5rem;
+      color: #e0f7fa;
+      text-shadow: 0 2px 12px #232526cc;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+    .start-btn {
+      background: linear-gradient(90deg, #00cfff 0%, #ffe066 100%);
+      color: #232526;
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 1.1rem 2.8rem;
       border: none;
-      border-radius: 12px;
-      background: #00c6ff;
-      color: white;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
+      border-radius: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 32px #00cfff55, 0 0 0 0 #ffe06655;
+      transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+      position: relative;
+      overflow: hidden;
+      outline: none;
+      z-index: 1;
+      letter-spacing: 1px;
     }
-    button:hover {
-      background: #0072ff;
-      transform: scale(1.05);
+    .start-btn::after {
+      content: '';
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 0; height: 0;
+      background: rgba(255,255,255,0.18);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s;
+      z-index: -1;
+    }
+    .start-btn:active::after {
+      width: 180%;
+      height: 180%;
+      transition: width 0s, height 0s;
+    }
+    .start-btn:hover, .start-btn:focus {
+      background: linear-gradient(90deg, #ffe066 0%, #00cfff 100%);
+      color: #ff6a00;
+      transform: scale(1.09) rotate(-2deg);
+      box-shadow: 0 8px 48px 0 #ffe06699, 0 2px 0 #fff, 0 0 0 8px #ffe06633;
+      outline: none;
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      .start-container {
+        padding: 24px 8px 20px 8px;
+        border-radius: 18px;
+      }
+      .start-container::before {
+        border-radius: 18px;
+      }
+      .start-title {
+        font-size: 2.1rem;
+      }
+      .start-title span {
+        font-size: 1.5rem;
+      }
+      .start-btn {
+        font-size: 1.1rem;
+        padding: 0.7rem 1.5rem;
+        border-radius: 12px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="animated-bg"></div>
-  <div class="container">
-    <h1>🕹️ Rock Paper Scissors</h1>
-    <p>Are you ready to defeat the computer in a legendary hand game?</p>
-    <button onclick="location.href='game.html'">Start Game</button>
+  <div class="animated-gradient"></div>
+  <!-- Animated floating emojis -->
+  <span class="floating-emoji emoji1">🪨</span>
+  <span class="floating-emoji emoji2">📄</span>
+  <span class="floating-emoji emoji3">✂️</span>
+  <span class="floating-emoji emoji4">🪨</span>
+  <span class="floating-emoji emoji5">📄</span>
+  <span class="floating-emoji emoji6">✂️</span>
+  <span class="floating-emoji emoji7">🪨</span>
+  <span class="floating-emoji emoji8">📄</span>
+  <span class="floating-emoji emoji9">✂️</span>
+  <span class="floating-emoji emoji10">🪨</span>
+  <span class="floating-emoji emoji11">📄</span>
+  <span class="floating-emoji emoji12">✂️</span>
+  <!-- Sound: Button click and background music -->
+  <audio id="btn-sound" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12b6fae7b5.mp3"></audio>
+  <audio id="bg-music" src="https://cdn.pixabay.com/audio/2023/03/27/audio_128bfae7e2.mp3" loop></audio>
+  <div class="start-container">
+    <div class="start-title">
+      <span>🕹️</span>
+      Rock Paper Scissors
+    </div>
+    <div class="start-desc">
+      Are you ready to defeat the computer in a legendary hand game?
+    </div>
+    <button class="start-btn" id="start-btn">Start Game</button>
   </div>
+  <script>
+    // Play background music on first user interaction
+    let musicStarted = false;
+    function startMusic() {
+      if (!musicStarted) {
+        const bgMusic = document.getElementById('bg-music');
+        bgMusic.volume = 0.25;
+        bgMusic.play();
+        musicStarted = true;
+      }
+    }
+    // Button sound effect
+    document.getElementById('start-btn').addEventListener('click', function(e) {
+      startMusic();
+      document.getElementById('btn-sound').currentTime = 0;
+      document.getElementById('btn-sound').play();
+      setTimeout(() => {
+        window.location.href = 'game.html';
+      }, 180); // let the sound play a bit before navigating
+    });
+    // Also start music on any user interaction (for mobile)
+    window.addEventListener('pointerdown', startMusic, { once: true });
+  </script>
 </body>
 </html>
