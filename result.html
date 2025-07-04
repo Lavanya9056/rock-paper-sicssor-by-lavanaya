@@ -1,0 +1,236 @@
+<!-- result.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Result</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+      overflow: hidden;
+      color: #fff;
+      transition: background 0.5s;
+    }
+    .animated-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .cloud {
+      position: absolute;
+      opacity: 0.7;
+      animation: cloudMove 40s linear infinite;
+    }
+    .cloud1 {
+      top: 10%;
+      left: -200px;
+      width: 180px;
+      height: 80px;
+      animation-duration: 40s;
+      opacity: 0.7;
+    }
+    .cloud2 {
+      top: 30%;
+      left: -250px;
+      width: 220px;
+      height: 100px;
+      animation-duration: 60s;
+      animation-delay: 10s;
+      opacity: 0.5;
+    }
+    .cloud3 {
+      top: 60%;
+      left: -180px;
+      width: 140px;
+      height: 60px;
+      animation-duration: 50s;
+      animation-delay: 20s;
+      opacity: 0.6;
+    }
+    @keyframes cloudMove {
+      0% { left: -250px; }
+      100% { left: 110vw; }
+    }
+    .sun {
+      position: absolute;
+      top: 8%;
+      left: 80%;
+      width: 120px;
+      height: 120px;
+      z-index: 1;
+      animation: sunPulse 4s ease-in-out infinite alternate;
+    }
+    @keyframes sunPulse {
+      0% { filter: brightness(1) drop-shadow(0 0 30px #ffe066); }
+      100% { filter: brightness(1.2) drop-shadow(0 0 60px #ffe066); }
+    }
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      transition: color 0.5s;
+    }
+    #resultText {
+      font-size: 1.5rem;
+      white-space: pre-line;
+    }
+    .woman-svg {
+      width: 180px;
+      height: 180px;
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+    .woman-svg.active {
+      display: block;
+      animation: popIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    button {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #388e3c;
+    }
+    /* Sad theme */
+    body.sad {
+      background: linear-gradient(to right, #232526, #414345);
+    }
+    body.sad h1 {
+      color: #ff6a6a;
+    }
+    /* Happy theme */
+    body.happy {
+      background: linear-gradient(to right, #43cea2, #185a9d);
+    }
+    body.happy h1 {
+      color: #ffe066;
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg">
+    <!-- Cartoon Sun -->
+    <svg class="sun" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="30" fill="#ffe066" stroke="#ffd700" stroke-width="5"/>
+      <g>
+        <line x1="50" y1="5" x2="50" y2="25" stroke="#ffd700" stroke-width="4"/>
+        <line x1="50" y1="95" x2="50" y2="75" stroke="#ffd700" stroke-width="4"/>
+        <line x1="5" y1="50" x2="25" y2="50" stroke="#ffd700" stroke-width="4"/>
+        <line x1="95" y1="50" x2="75" y2="50" stroke="#ffd700" stroke-width="4"/>
+        <line x1="20" y1="20" x2="35" y2="35" stroke="#ffd700" stroke-width="4"/>
+        <line x1="80" y1="20" x2="65" y2="35" stroke="#ffd700" stroke-width="4"/>
+        <line x1="20" y1="80" x2="35" y2="65" stroke="#ffd700" stroke-width="4"/>
+        <line x1="80" y1="80" x2="65" y2="65" stroke="#ffd700" stroke-width="4"/>
+      </g>
+    </svg>
+    <!-- Cartoon Clouds -->
+    <svg class="cloud cloud1" viewBox="0 0 180 80">
+      <ellipse cx="40" cy="40" rx="40" ry="25" fill="#fff"/>
+      <ellipse cx="90" cy="35" rx="35" ry="20" fill="#fff"/>
+      <ellipse cx="130" cy="45" rx="30" ry="18" fill="#fff"/>
+      <ellipse cx="70" cy="60" rx="30" ry="15" fill="#fff"/>
+    </svg>
+    <svg class="cloud cloud2" viewBox="0 0 220 100">
+      <ellipse cx="60" cy="60" rx="50" ry="30" fill="#fff"/>
+      <ellipse cx="120" cy="50" rx="40" ry="25" fill="#fff"/>
+      <ellipse cx="170" cy="70" rx="35" ry="20" fill="#fff"/>
+      <ellipse cx="100" cy="80" rx="40" ry="18" fill="#fff"/>
+    </svg>
+    <svg class="cloud cloud3" viewBox="0 0 140 60">
+      <ellipse cx="30" cy="30" rx="30" ry="15" fill="#fff"/>
+      <ellipse cx="70" cy="25" rx="25" ry="12" fill="#fff"/>
+      <ellipse cx="110" cy="35" rx="20" ry="10" fill="#fff"/>
+      <ellipse cx="60" cy="45" rx="20" ry="8" fill="#fff"/>
+    </svg>
+  </div>
+  <div class="container">
+    <h1 id="resultHeading">Result</h1>
+    <!-- Happy Woman SVG -->
+    <svg id="happyWoman" class="woman-svg" viewBox="0 0 120 120" fill="none">
+      <ellipse cx="60" cy="60" rx="50" ry="50" fill="#ffe0b2"/>
+      <ellipse cx="60" cy="90" rx="28" ry="14" fill="#fff"/>
+      <ellipse cx="60" cy="90" rx="18" ry="8" fill="#ffb74d"/>
+      <ellipse cx="45" cy="55" rx="6" ry="8" fill="#fff"/>
+      <ellipse cx="75" cy="55" rx="6" ry="8" fill="#fff"/>
+      <ellipse cx="45" cy="57" rx="3" ry="4" fill="#333"/>
+      <ellipse cx="75" cy="57" rx="3" ry="4" fill="#333"/>
+      <path d="M50 75 Q60 95 70 75" stroke="#e65100" stroke-width="3" fill="none"/>
+      <ellipse cx="60" cy="35" rx="18" ry="10" fill="#fbc02d"/>
+      <ellipse cx="60" cy="25" rx="10" ry="5" fill="#fbc02d"/>
+      <ellipse cx="60" cy="20" rx="5" ry="2" fill="#fbc02d"/>
+      <ellipse cx="35" cy="80" rx="3" ry="2" fill="#e65100"/>
+      <ellipse cx="85" cy="80" rx="3" ry="2" fill="#e65100"/>
+      <ellipse cx="60" cy="60" rx="50" ry="50" fill="none" stroke="#e65100" stroke-width="2"/>
+    </svg>
+    <!-- Sad/Crying Woman SVG -->
+    <svg id="sadWoman" class="woman-svg" viewBox="0 0 120 120" fill="none">
+      <ellipse cx="60" cy="60" rx="50" ry="50" fill="#ffe0b2"/>
+      <ellipse cx="60" cy="35" rx="18" ry="10" fill="#fbc02d"/>
+      <ellipse cx="60" cy="25" rx="10" ry="5" fill="#fbc02d"/>
+      <ellipse cx="60" cy="20" rx="5" ry="2" fill="#fbc02d"/>
+      <ellipse cx="45" cy="55" rx="6" ry="8" fill="#fff"/>
+      <ellipse cx="75" cy="55" rx="6" ry="8" fill="#fff"/>
+      <ellipse cx="45" cy="57" rx="3" ry="4" fill="#333"/>
+      <ellipse cx="75" cy="57" rx="3" ry="4" fill="#333"/>
+      <path d="M50 80 Q60 70 70 80" stroke="#e65100" stroke-width="3" fill="none"/>
+      <ellipse cx="60" cy="90" rx="28" ry="14" fill="#ffe0b2"/>
+      <ellipse cx="60" cy="60" rx="50" ry="50" fill="none" stroke="#e65100" stroke-width="2"/>
+      <!-- Crying tears -->
+      <ellipse cx="45" cy="67" rx="2" ry="6" fill="#4fc3f7" opacity="0.7"/>
+      <ellipse cx="75" cy="67" rx="2" ry="6" fill="#4fc3f7" opacity="0.7"/>
+    </svg>
+    <p id="resultText">Loading result...</p>
+    <button onclick="location.href='game.html'">Play Again</button>
+  </div>
+  <script>
+    const result = localStorage.getItem('gameResult') || '';
+    document.getElementById('resultText').textContent = result;
+    let isWin = result.includes('You Win!');
+    let isLose = result.includes('You Lose!');
+    const happyWoman = document.getElementById('happyWoman');
+    const sadWoman = document.getElementById('sadWoman');
+    const heading = document.getElementById('resultHeading');
+    if (isWin) {
+      document.body.classList.add('happy');
+      heading.textContent = "🎉 You Win! 🎉";
+      happyWoman.classList.add('active');
+      sadWoman.classList.remove('active');
+    } else if (isLose) {
+      document.body.classList.add('sad');
+      heading.textContent = "😢 You Lose! 😢";
+      sadWoman.classList.add('active');
+      happyWoman.classList.remove('active');
+    } else {
+      heading.textContent = "It's a Draw!";
+      happyWoman.classList.remove('active');
+      sadWoman.classList.remove('active');
+    }
+  </script>
+</body>
+</html>
